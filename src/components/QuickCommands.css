@@ -1,0 +1,18 @@
+.quick-wrapper {
+  display: inline-flex;
+  align-items: flex-end;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  border: 10px solid black;
+}
+
+.quick-wrapper button {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
+.quick-wrapper #xtoggle {
+  text-align: center;
+}

@@ -1,5 +1,4 @@
 import React from "react";
-import _ from "lodash";
 import '../node_modules/react-grid-layout/css/styles.css';
 import '../node_modules/react-resizable/css/styles.css';
 import './App.css';
@@ -9,11 +8,14 @@ import { Responsive, WidthProvider } from "react-grid-layout";
 //import QuickCommandsList from './components/QuickCommandsList.js';
 import ChatSettings from './components/chatSettings.js';
 //import SpeechCommands from './components/SpeechCommands.js';
-//import Threedeespace from './components/threedeespace.js';
+import Threedeespace from './components/threedeespace.js';
 //import io from 'socket.io-client';
 //const socket = io('https://fusionpaloalto.elliotsyoung.com');
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
-
+var layout = [
+  {i: "first", x: 0, y: 0, w: 1, h: 2, },
+  {i: "second", x: 1, y: 2, w: 1, h: 2, }
+];
 class ToolBoxItem extends React.Component {
   render() {
     return (
@@ -51,7 +53,7 @@ export default class ToolboxLayout extends React.Component {
     rowHeight: 30,
     onLayoutChange: function() {},
     cols: { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 },
-    initialLayout: generateLayout()
+    initialLayout: layout
   };
 
   state = {
@@ -64,21 +66,6 @@ export default class ToolboxLayout extends React.Component {
 
   componentDidMount() {
     this.setState({ mounted: true });
-  }
-
-  generateDOM() {
-    return _.map(this.state.layouts[this.state.currentBreakpoint], l => {
-      return (
-        <div key={l.i}>
-          <div className="hide-button" onClick={this.onPutItem.bind(this, l)}>
-            &times;
-          </div>
-          {
-            <span className="text"><ChatSettings handleVoiceChange={this.handleVoiceChange}/></span>
-          }
-        </div>
-      );
-    });
   }
 
   onBreakpointChange = breakpoint => {
@@ -143,31 +130,33 @@ export default class ToolboxLayout extends React.Component {
         <ResponsiveReactGridLayout
           {...this.props}
           layouts={this.state.layouts}
-          onBreakpointChange={this.onBreakpointChange}
-          onLayoutChange={this.onLayoutChange}
-          // WidthProvider option
           measureBeforeMount={false}
-          // I like to have it animate on mount. If you don't, delete `useCSSTransforms` (it's default `true`)
-          // and set `measureBeforeMount={true}`.
           useCSSTransforms={this.state.mounted}
           compactType={this.state.compactType}
           preventCollision={!this.state.compactType}
         >
-          {this.generateDOM()}
+          {
+            <div key={"first"}>
+            <div className="hide-button" onClick={this.onPutItem.bind(this, "first")}>
+              &times;
+            </div>
+            {
+              <span className="text"><ChatSettings handleVoiceChange={this.handleVoiceChange}/></span>
+            }
+            </div>
+          }
+          {
+            <div key={"second"}>
+            <div className="hide-button" onClick={this.onPutItem.bind(this, "second")}>
+              &times;
+            </div>
+            {
+              <span className="text"><Threedeespace/></span>
+            }
+            </div>
+          }
         </ResponsiveReactGridLayout>
       </div>
-    );
+      );
   }
-}
-
-function generateLayout() {
-  return _.map(_.range(0, 1), function(item, i) {
-    return {
-      x: 0,
-      y: 0,
-      w: 4,
-      h: 2,
-      i: i.toString()
-        };
-  });
 }
